@@ -101,7 +101,7 @@ El sistema calcula el precio comercial de un vehiculo consultando **multiples fu
 
 Cada fuente de precios aplica su propia formula de depreciacion. A continuacion el snippet de la logica utilizada:
 
-### PatioTuerca (Web Scraping)
+### PatioTuerca (Proveedor de Precios)
 
 ```java
 /**
@@ -284,13 +284,13 @@ private void applyHomologation(Vehicle vehicle) {
 
 ---
 
-## Snippet: Extraccion Paralela con CompletableFuture
+## Snippet: Consulta Paralela a Proveedores con CompletableFuture
 
-La extraccion de datos y precios se ejecuta en paralelo con timeout:
+La consulta a proveedores de datos y precios se ejecuta en paralelo con timeout:
 
 ```java
 /**
- * Extraccion paralela:
+ * Consulta paralela a proveedores:
  *   1. Lanza N extractores en hilos separados (@Async)
  *   2. Espera a que todos completen (o timeout de 25s)
  *   3. Recolecta resultados exitosos
@@ -330,7 +330,7 @@ List<ExtractedVehicleData> results = futures.stream()
 
 | Fuente | Tipo | Depreciacion | Piso | Rango | Latencia (mock) |
 |--------|------|-------------|------|-------|-----------------|
-| PatioTuerca | Web Scraping | 8% anual | 20% | +/- 15% | 2.5s |
+| PatioTuerca | Proveedor de Precios | 8% anual | 20% | +/- 15% | 2.5s |
 | Aseguradora | Aseguradora | 7% anual | 25% | +/- 10% | 1.8s |
 
 ---
@@ -375,7 +375,7 @@ List<ExtractedVehicleData> results = futures.stream()
 | Archivo | Descripcion |
 |---------|-------------|
 | `service/impl/PriceCalculationServiceImpl.java` | Orquestador de calculo de precios |
-| `service/impl/VehicleExtractionServiceImpl.java` | Orquestador de extraccion RPA paralela |
+| `service/impl/VehicleExtractionServiceImpl.java` | Orquestador de consulta paralela a proveedores |
 | `service/impl/VehicleQueryServiceImpl.java` | Orquestador principal del flujo completo |
 | `extractor/mock/PatioTuercaPriceExtractorMock.java` | Mock de precios PatioTuerca |
 | `extractor/mock/AseguradoraPriceExtractorMock.java` | Mock de precios Aseguradora |

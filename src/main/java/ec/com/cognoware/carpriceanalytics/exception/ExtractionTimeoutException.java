@@ -12,7 +12,7 @@ package ec.com.cognoware.carpriceanalytics.exception;
 import java.io.Serial;
 
 /**
- * Excepcion lanzada cuando un extractor RPA excede el timeout.
+ * Excepcion lanzada cuando un extractor de proveedor excede el timeout.
  *
  * @author JJARA
  * @version 1.0.0

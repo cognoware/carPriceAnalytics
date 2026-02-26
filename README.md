@@ -1,6 +1,6 @@
 # carPriceAnalytics
 
-**Sistema de Analisis de Precios Vehiculares con Proceso RPA**
+**Sistema de Analisis de Precios Vehiculares con Integracion de Proveedores**
 
 Autor: **JJARA** | Version: **1.0.0** | Fecha: **2025-02-26**
 
@@ -8,7 +8,7 @@ Autor: **JJARA** | Version: **1.0.0** | Fecha: **2025-02-26**
 
 ## Descripcion
 
-API REST que consulta datos vehiculares desde multiples fuentes externas (SRI, ANT, SourceDB) mediante procesos RPA en paralelo, calcula precios comerciales desde PatioTuerca y Aseguradora, y expone los resultados a traves de endpoints seguros con JWT (Keycloak).
+API REST que consulta datos vehiculares desde multiples proveedores habilitados (SRI, ANT, SourceDB) mediante consumo de servicios en paralelo, calcula precios comerciales desde PatioTuerca y Aseguradora, y expone los resultados a traves de endpoints seguros con JWT (Keycloak).
 
 Este proyecto es una migracion del flujo `PersonaVehiculoController` del proyecto legacy `consultas_spring` hacia una arquitectura moderna con Spring Boot 4.0.3 y Java 21.
 
@@ -41,7 +41,7 @@ ec.com.cognoware.carpriceanalytics/
 │   └── output/             # DTOs de salida (VehicleQueryOutput, etc.)
 ├── exception/              # Excepciones personalizadas
 ├── extractor/
-│   ├── interfaces/         # Contratos para extractores RPA y precios
+│   ├── interfaces/         # Contratos para extractores de proveedores y precios
 │   └── mock/              # Implementaciones mock para demo
 ├── mapper/                 # Conversion Entity <-> DTO
 ├── model/                  # Entidades JPA (Vehicle, VehicleModel, etc.)
@@ -66,7 +66,7 @@ Request → Controller → VehicleQueryService
                       /           \
                     NO             SI
                     │               │
-               Retornar        Extraccion RPA
+               Retornar        Consulta proveedores
                cache           (paralelo, 25s timeout)
                                     │
                               ┌─────┼─────┐
@@ -166,7 +166,7 @@ La aplicacion arranca en `http://localhost:8080/api/car-price`
 |-----------|---------------|-------------|
 | `server.servlet.context-path` | `/api/car-price` | Ruta base de la API |
 | `spring.security.oauth2.resourceserver.jwt.issuer-uri` | `http://localhost:8080/realms/master` | URI del emisor JWT (Keycloak) |
-| `extraction.timeout.default` | `25000` | Timeout de extraccion RPA (ms) |
+| `extraction.timeout.default` | `25000` | Timeout de consulta a proveedores (ms) |
 | `extraction.timeout.price` | `20000` | Timeout de calculo de precios (ms) |
 | `extraction.cache.limit-days` | `7` | Dias de vigencia del cache |
 | `spring.task.execution.pool.core-size` | `5` | Hilos minimos del pool async |
@@ -207,7 +207,7 @@ curl -H "Authorization: Bearer <JWT_TOKEN>" \
 
 ## Extractores (Mocks)
 
-Para la demo, los extractores RPA son **mocks** que retornan datos fijos con latencia simulada:
+Para la demo, los extractores de proveedores son **mocks** que retornan datos fijos con latencia simulada:
 
 | Extractor | Tipo | Prioridad | Latencia | Datos |
 |-----------|------|-----------|----------|-------|

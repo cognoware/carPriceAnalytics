@@ -49,7 +49,7 @@ public class AsyncConfig {
         executor.setCorePoolSize(corePoolSize);
         executor.setMaxPoolSize(maxPoolSize);
         executor.setQueueCapacity(queueCapacity);
-        executor.setThreadNamePrefix("rpa-extractor-");
+        executor.setThreadNamePrefix("provider-extractor-");
         executor.initialize();
         return executor;
     }

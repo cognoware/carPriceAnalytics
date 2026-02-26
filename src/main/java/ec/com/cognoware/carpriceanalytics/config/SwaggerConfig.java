@@ -43,7 +43,7 @@ public class SwaggerConfig {
                 .version("1.0.0")
                 .description(
                     "API de consulta de vehiculos y calculo "
-                    + "de precios mediante proceso RPA"
+                    + "de precios mediante proveedores habilitados"
                 )
                 .contact(new Contact()
                     .name("Cognoware Cia. Ltda.")

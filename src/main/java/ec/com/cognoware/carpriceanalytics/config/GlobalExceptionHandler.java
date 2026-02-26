@@ -57,7 +57,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Maneja excepcion de timeout en extraccion RPA.
+     * Maneja excepcion de timeout en consulta a proveedores.
      *
      * @param ex excepcion capturada.
      * @return respuesta 504 con detalle del error.

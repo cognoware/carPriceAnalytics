@@ -22,7 +22,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Mock del extractor de deudas ANT para demo.
  *
- * Simula la respuesta del servicio RPA de la ANT.
+ * Simula la respuesta del servicio de proveedor de la ANT.
  *
  * @author JJARA
  * @version 1.0.0
@@ -80,7 +80,7 @@ public class AntDebtExtractorMock implements VehicleDataExtractor {
     }
 
     /**
-     * Simula latencia de red en la extraccion ANT.
+     * Simula latencia de red en la consulta al proveedor ANT.
      *
      * Uso de try-catch: necesario para manejar
      * InterruptedException del Thread.sleep() y restaurar

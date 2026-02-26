@@ -24,8 +24,8 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Mock del extractor de precios de PatioTuerca para demo.
  *
- * Simula el web scraping a PatioTuerca con precios de ejemplo
- * basados en la marca, modelo y anio del vehiculo.
+ * Simula el consumo del servicio de precios de PatioTuerca
+ * con datos de ejemplo basados en marca, modelo y anio.
  *
  * @author JJARA
  * @version 1.0.0
@@ -113,7 +113,7 @@ public class PatioTuercaPriceExtractorMock
     }
 
     /**
-     * Simula latencia de red en el web scraping.
+     * Simula latencia de red en la consulta al proveedor.
      *
      * Uso de try-catch: necesario para manejar
      * InterruptedException del Thread.sleep() y restaurar

@@ -12,7 +12,7 @@
     <artifactId>carPriceAnalytics</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>carPriceAnalytics</name>
-    <description>Car Price Analytics - RPA and price calculation demo</description>
+    <description>Car Price Analytics - Provider services integration and price calculation demo</description>
 
     <properties>
         <java.version>21</java.version>

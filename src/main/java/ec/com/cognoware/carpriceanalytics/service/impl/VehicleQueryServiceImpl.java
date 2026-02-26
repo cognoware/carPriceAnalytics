@@ -31,7 +31,7 @@ import java.util.List;
 /**
  * Orquestador principal de consulta de vehiculos.
  *
- * Implementa el flujo completo: cache -> extraccion RPA ->
+ * Implementa el flujo completo: cache -> consulta a proveedores ->
  * merge por prioridad -> calculo de precios -> persistencia.
  *
  * @author JJARA
@@ -57,7 +57,7 @@ public class VehicleQueryServiceImpl
      * Constructor con inyeccion de dependencias.
      *
      * @param vehicleRepository repositorio de vehiculos.
-     * @param extractionService servicio de extraccion RPA.
+     * @param extractionService servicio de consulta a proveedores.
      * @param priceCalcService servicio de calculo de precios.
      * @param configService servicio de configuracion.
      * @param freshnessValidator validador de frescura.
@@ -101,7 +101,7 @@ public class VehicleQueryServiceImpl
         if (cached.isEmpty()
             || freshnessValidator.hasExpired(cached, limitDays)) {
             log.info(
-                "Cache expirado o vacio, extrayendo datos RPA"
+                "Cache expirado o vacio, consultando proveedores"
             );
             List<Vehicle> refreshed =
                 extractAndBuildVehicles(identification, null);
@@ -132,7 +132,7 @@ public class VehicleQueryServiceImpl
         if (cached.isEmpty()
             || freshnessValidator.hasExpired(cached, limitDays)) {
             log.info(
-                "Cache expirado o vacio, extrayendo datos RPA"
+                "Cache expirado o vacio, consultando proveedores"
             );
             List<Vehicle> refreshed =
                 extractAndBuildVehicles(null, licensePlate);

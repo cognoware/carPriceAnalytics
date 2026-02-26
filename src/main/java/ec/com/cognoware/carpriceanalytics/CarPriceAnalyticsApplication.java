@@ -16,7 +16,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Clase principal de la aplicacion Spring Boot.
  *
  * Inicia el sistema de analisis de precios vehiculares con
- * extraccion RPA y calculo de valores comerciales.
+ * consulta a proveedores habilitados y calculo de valores
+ * comerciales.
  *
  * @author JJARA
  * @version 1.0.0

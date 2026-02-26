@@ -14,7 +14,7 @@ import ec.com.cognoware.carpriceanalytics.dto.output.VehicleQueryOutput;
 /**
  * Servicio principal de consulta de vehiculos.
  *
- * Orquesta la busqueda en cache, extraccion RPA y calculo de precios.
+ * Orquesta la busqueda en cache, consulta a proveedores y calculo de precios.
  *
  * @author JJARA
  * @version 1.0.0

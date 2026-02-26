@@ -19,7 +19,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * DTO interno con datos extraidos de fuentes externas (RPA).
+ * DTO interno con datos extraidos de proveedores habilitados.
  *
  * Contiene la prioridad del extractor para el merge de datos.
  *

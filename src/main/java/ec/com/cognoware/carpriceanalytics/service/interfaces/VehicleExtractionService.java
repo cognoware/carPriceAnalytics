@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Servicio de extraccion de datos vehiculares desde fuentes externas.
  *
- * Orquesta llamadas paralelas a multiples extractores RPA.
+ * Orquesta llamadas paralelas a multiples proveedores habilitados.
  *
  * @author JJARA
  * @version 1.0.0

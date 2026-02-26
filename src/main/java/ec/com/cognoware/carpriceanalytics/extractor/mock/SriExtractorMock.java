@@ -22,8 +22,8 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Mock del extractor del SRI para demo.
  *
- * Simula la respuesta del servicio RPA del SRI con datos
- * de ejemplo y latencia artificial.
+ * Simula la respuesta del servicio de proveedor del SRI
+ * con datos de ejemplo y latencia artificial.
  *
  * @author JJARA
  * @version 1.0.0
@@ -89,7 +89,7 @@ public class SriExtractorMock implements VehicleDataExtractor {
     }
 
     /**
-     * Simula latencia de red en la extraccion RPA.
+     * Simula latencia de red en la consulta al proveedor.
      *
      * Uso de try-catch: necesario para manejar
      * InterruptedException del Thread.sleep() y restaurar

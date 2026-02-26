@@ -32,7 +32,8 @@ import org.springframework.web.bind.annotation.RestController;
  * Controlador REST para consulta de vehiculos y precios.
  *
  * Expone endpoints para buscar vehiculos por identificacion
- * o placa, ejecutando el proceso RPA y calculo de precios.
+ * o placa, ejecutando consulta a proveedores habilitados
+ * y calculo de precios.
  *
  * @author JJARA
  * @version 1.0.0
@@ -43,7 +44,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Tag(
     name = "Vehicle Query",
-    description = "Consulta de vehiculos con proceso RPA y precios"
+    description = "Consulta de vehiculos mediante proveedores habilitados"
 )
 public class VehicleQueryController {
 
@@ -64,8 +65,8 @@ public class VehicleQueryController {
     /**
      * Busca vehiculos por identificacion del propietario.
      *
-     * Ejecuta extraccion RPA y calculo de precios si los datos
-     * en cache estan expirados o no existen.
+     * Ejecuta consulta a proveedores habilitados y calculo de
+     * precios si los datos en cache estan expirados o no existen.
      *
      * @param realm realm de Keycloak.
      * @param identification cedula o RUC del propietario.
@@ -74,7 +75,7 @@ public class VehicleQueryController {
     @Operation(
         summary = "Buscar por identificacion",
         description = "Busca vehiculos por cedula o RUC del "
-            + "propietario con proceso RPA y calculo de precios"
+            + "propietario mediante proveedores habilitados"
     )
     @ApiResponses({
         @ApiResponse(
@@ -118,8 +119,8 @@ public class VehicleQueryController {
     /**
      * Busca vehiculo por numero de placa.
      *
-     * Ejecuta extraccion RPA y calculo de precios si los datos
-     * en cache estan expirados o no existen.
+     * Ejecuta consulta a proveedores habilitados y calculo de
+     * precios si los datos en cache estan expirados o no existen.
      *
      * @param realm realm de Keycloak.
      * @param licensePlate numero de placa del vehiculo.
@@ -128,7 +129,7 @@ public class VehicleQueryController {
     @Operation(
         summary = "Buscar por placa",
         description = "Busca vehiculo por numero de placa "
-            + "con proceso RPA y calculo de precios"
+            + "mediante proveedores habilitados"
     )
     @ApiResponses({
         @ApiResponse(
