@@ -17,8 +17,8 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Interfaz para extractores de precios vehiculares.
  *
- * Cada implementacion consulta una fuente de precios diferente
- * (PatioTuerca, Aseguradora, etc.)
+ * Cada implementacion consulta un proveedor de precios
+ * habilitado diferente.
  *
  * @author JJARA
  * @version 1.0.0

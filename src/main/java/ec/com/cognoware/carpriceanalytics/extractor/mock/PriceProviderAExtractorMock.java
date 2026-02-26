@@ -22,9 +22,9 @@ import java.time.LocalDateTime;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Mock del extractor de precios de PatioTuerca para demo.
+ * Mock del extractor de precios del Proveedor A para demo.
  *
- * Simula el consumo del servicio de precios de PatioTuerca
+ * Simula el consumo del servicio de precios del Proveedor A
  * con datos de ejemplo basados en marca, modelo y anio.
  *
  * @author JJARA
@@ -32,11 +32,11 @@ import java.util.concurrent.CompletableFuture;
  * @since 2025-02-26
  */
 @Component
-public class PatioTuercaPriceExtractorMock
+public class PriceProviderAExtractorMock
     implements VehiclePriceExtractor {
 
     private static final Logger log = LoggerFactory.getLogger(
-        PatioTuercaPriceExtractorMock.class
+        PriceProviderAExtractorMock.class
     );
 
     private static final int SIMULATED_DELAY_MS = 2500;
@@ -55,7 +55,7 @@ public class PatioTuercaPriceExtractorMock
         Vehicle vehicle
     ) {
         log.info(
-            "PatioTuerca Mock: calculando precio para {} {} {}",
+            "Proveedor Precios A Mock: calculando precio para {} {} {}",
             vehicle.getBrand(),
             vehicle.getModel(),
             vehicle.getVehicleYear()
@@ -79,7 +79,7 @@ public class PatioTuercaPriceExtractorMock
             .build();
 
         log.info(
-            "PatioTuerca Mock: precio calculado ${} para {} {}",
+            "Proveedor Precios A Mock: precio calculado ${} para {} {}",
             avgPrice,
             vehicle.getBrand(),
             vehicle.getModel()
@@ -92,7 +92,7 @@ public class PatioTuercaPriceExtractorMock
      */
     @Override
     public String getSourceName() {
-        return "PATIO_TUERCA";
+        return "PRICE_PROVIDER_A";
     }
 
     private BigDecimal calculateMockPrice(Vehicle vehicle) {

@@ -22,9 +22,9 @@ import java.time.LocalDateTime;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Mock del extractor de precios Aseguradora para demo.
+ * Mock del extractor de precios del Proveedor B para demo.
  *
- * Simula la consulta de precios de aseguradora Aseguradora
+ * Simula la consulta de precios del Proveedor B
  * con datos de ejemplo.
  *
  * @author JJARA
@@ -32,11 +32,11 @@ import java.util.concurrent.CompletableFuture;
  * @since 2025-02-26
  */
 @Component
-public class GeneraliPriceExtractorMock
+public class PriceProviderBExtractorMock
     implements VehiclePriceExtractor {
 
     private static final Logger log = LoggerFactory.getLogger(
-            GeneraliPriceExtractorMock.class
+        PriceProviderBExtractorMock.class
     );
 
     private static final int SIMULATED_DELAY_MS = 1800;
@@ -55,7 +55,7 @@ public class GeneraliPriceExtractorMock
         Vehicle vehicle
     ) {
         log.info(
-            "Aseguradora Mock: calculando precio para {} {} {}",
+            "Proveedor Precios B Mock: calculando precio para {} {} {}",
             vehicle.getBrand(),
             vehicle.getModel(),
             vehicle.getVehicleYear()
@@ -79,7 +79,7 @@ public class GeneraliPriceExtractorMock
             .build();
 
         log.info(
-            "Aseguradora Mock: precio calculado ${} para {} {}",
+            "Proveedor Precios B Mock: precio calculado ${} para {} {}",
             avgPrice,
             vehicle.getBrand(),
             vehicle.getModel()
@@ -92,7 +92,7 @@ public class GeneraliPriceExtractorMock
      */
     @Override
     public String getSourceName() {
-        return "Aseguradora";
+        return "PRICE_PROVIDER_B";
     }
 
     private BigDecimal calculateMockPrice(Vehicle vehicle) {
@@ -113,7 +113,7 @@ public class GeneraliPriceExtractorMock
     }
 
     /**
-     * Simula latencia de red en la consulta Aseguradora.
+     * Simula latencia de red en la consulta al proveedor.
      *
      * Uso de try-catch: necesario para manejar
      * InterruptedException del Thread.sleep() y restaurar

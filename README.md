@@ -8,7 +8,7 @@ Autor: **JJARA** | Version: **1.0.0** | Fecha: **2025-02-26**
 
 ## Descripcion
 
-API REST que consulta datos vehiculares desde multiples proveedores habilitados (SRI, ANT, SourceDB) mediante consumo de servicios en paralelo, calcula precios comerciales desde PatioTuerca y Aseguradora, y expone los resultados a traves de endpoints seguros con JWT (Keycloak).
+API REST que consulta datos vehiculares desde multiples proveedores habilitados mediante consumo de servicios en paralelo, calcula precios comerciales desde proveedores de precios autorizados, y expone los resultados a traves de endpoints seguros con JWT (Keycloak).
 
 Este proyecto es una migracion del flujo `PersonaVehiculoController` del proyecto legacy `consultas_spring` hacia una arquitectura moderna con Spring Boot 4.0.3 y Java 21.
 
@@ -70,8 +70,9 @@ Request → Controller → VehicleQueryService
                cache           (paralelo, 25s timeout)
                                     │
                               ┌─────┼─────┐
-                              SRI  SrcDB  ANT
-                              (P:1) (P:2) (P:4)
+                            Prov  Prov   Prov
+                            Pri   Sec    Terc
+                            (P:1) (P:2)  (P:4)
                                     │
                               Merge por prioridad
                                     │
@@ -81,7 +82,8 @@ Request → Controller → VehicleQueryService
                               (paralelo, 20s timeout)
                                     │
                               ┌─────┴─────┐
-                          PatioTuerca  Aseguradora
+                          Proveedor    Proveedor
+                          Precios A    Precios B
                                     │
                               Promedio fuentes
                                     │
@@ -211,11 +213,11 @@ Para la demo, los extractores de proveedores son **mocks** que retornan datos fi
 
 | Extractor | Tipo | Prioridad | Latencia | Datos |
 |-----------|------|-----------|----------|-------|
-| SRI | Datos vehiculares | 1 (mayor) | 2.0s | Placa, dueño, marca, modelo, VIN |
-| SourceDB | Datos vehiculares | 2 | 1.5s | Placa, dueño, marca, modelo |
-| ANT | Datos vehiculares | 4 (menor) | 3.0s | Placa, marca, modelo, canton |
-| PatioTuerca | Precios | - | 2.5s | Avg, min, max (depreciacion 8%) |
-| Aseguradora | Precios | - | 1.8s | Avg, min, max (depreciacion 7%) |
+| Proveedor Primario | Datos vehiculares | 1 (mayor) | 2.0s | Placa, dueño, marca, modelo, VIN |
+| Proveedor Secundario | Datos vehiculares | 2 | 1.5s | Placa, dueño, marca, modelo |
+| Proveedor Terciario | Datos vehiculares | 4 (menor) | 3.0s | Placa, marca, modelo, canton |
+| Proveedor de Precios A | Precios | - | 2.5s | Avg, min, max (depreciacion 8%) |
+| Proveedor de Precios B | Precios | - | 1.8s | Avg, min, max (depreciacion 7%) |
 
 Para reemplazar un mock por la implementacion real, basta con crear una nueva clase que implemente `VehicleDataExtractor` o `VehiclePriceExtractor` y anotarla con `@Component`.
 
@@ -224,10 +226,10 @@ Para reemplazar un mock por la implementacion real, basta con crear una nueva cl
 ## Documentacion del Calculo de Precios
 
 Ver [docs/PRICE_CALCULATION.md](docs/PRICE_CALCULATION.md) para el detalle completo de:
-- Formulas de depreciacion por fuente
+- Formulas de depreciacion por proveedor
 - Snippets de codigo con ejemplos numericos
 - Diagrama del flujo de calculo
-- Tabla comparativa de fuentes
+- Tabla comparativa de proveedores
 
 ---
 
@@ -242,12 +244,12 @@ Ver [docs/PRICE_CALCULATION.md](docs/PRICE_CALCULATION.md) para el detalle compl
 | `ValidadorActualizable` | `FreshnessValidator` |
 | `ServicioService` | `ServiceConfigServiceImpl` |
 | `VehiculoHomologacionService` | `PriceCalculationServiceImpl` |
-| `PersonaVehiculoAseguradoraDto` | `ExtractedVehicleData` |
+| `PersonaVehiculoDto` | `ExtractedVehicleData` |
 | `ConsultaPersonaVehiculo` | `VehicleQueryOutput` |
-| `SRIVehiculosPythonExtractor` | `SriExtractorMock` |
-| `SourceDBVehiculoExtractor` | `SourceDbExtractorMock` |
-| `AntDeudaExtractor` | `AntDebtExtractorMock` |
-| `PatioTuercaPrecioModeloExtractor` | `PatioTuercaPriceExtractorMock` |
+| `ExtractorPrimario` | `PrimaryProviderExtractorMock` |
+| `ExtractorSecundario` | `SecondaryProviderExtractorMock` |
+| `ExtractorTerciario` | `TertiaryProviderExtractorMock` |
+| `ExtractorPreciosA` | `PriceProviderAExtractorMock` |
 
 ---
 

@@ -8,7 +8,7 @@
 
 ## Descripcion General
 
-El sistema calcula el precio comercial de un vehiculo consultando **multiples fuentes de precios en paralelo**, promediando los resultados y aplicando una **homologacion de modelos** para mapear el modelo tecnico (ej. `AVEO FAMILY`) al modelo comercial (ej. `AVEO FAMILY 1.5L`).
+El sistema calcula el precio comercial de un vehiculo consultando **multiples proveedores de precios habilitados en paralelo**, promediando los resultados y aplicando una **homologacion de modelos** para mapear el modelo tecnico (ej. `AVEO FAMILY`) al modelo comercial (ej. `AVEO FAMILY 1.5L`).
 
 ---
 
@@ -32,25 +32,26 @@ El sistema calcula el precio comercial de un vehiculo consultando **multiples fu
                     /      │     \
                    ▼       │      ▼
             Retornar       │   ┌──────────────────────────┐
-            cache          │   │  2. EXTRACCION PARALELA  │
+            cache          │   │  2. CONSULTA PARALELA    │
                            │   │  (CompletableFuture)     │
                            │   │  Timeout: 25 segundos    │
                            │   └──────────┬───────────────┘
                            │              │
                            │    ┌─────────┼──────────┐
                            │    ▼         ▼          ▼
-                           │  ┌───┐    ┌────┐    ┌─────┐
-                           │  │SRI│    │SRC │    │ ANT │
-                           │  │P:1│    │DB  │    │ P:4 │
-                           │  │2s │    │P:2 │    │ 3s  │
-                           │  └───┘    │1.5s│    └─────┘
-                           │           └────┘
+                           │  ┌────┐  ┌──────┐  ┌──────┐
+                           │  │Prov│  │Prov  │  │Prov  │
+                           │  │Pri │  │Sec   │  │Terc  │
+                           │  │P:1 │  │P:2   │  │P:4   │
+                           │  │2s  │  │1.5s  │  │3s    │
+                           │  └────┘  └──────┘  └──────┘
                            │              │
                            │              ▼
                            │   ┌──────────────────────────┐
                            │   │  3. MERGE POR PRIORIDAD  │
-                           │   │  SRI(1) > SrcDB(2) >     │
-                           │   │  ANT(4)                   │
+                           │   │  Primario(1) >            │
+                           │   │  Secundario(2) >          │
+                           │   │  Terciario(4)             │
                            │   └──────────┬───────────────┘
                            │              │
                            │              ▼
@@ -69,8 +70,9 @@ El sistema calcula el precio comercial de un vehiculo consultando **multiples fu
                            │    ┌─────────┴──────────┐
                            │    ▼                    ▼
                            │ ┌──────────┐    ┌──────────┐
-                           │ │PatioTuerca│   │ Aseguradora │
-                           │ │  2.5s     │   │  1.8s    │
+                           │ │Proveedor │    │Proveedor │
+                           │ │Precios A │    │Precios B │
+                           │ │  2.5s    │    │  1.8s    │
                            │ └──────────┘    └──────────┘
                            │         │            │
                            │         ▼            ▼
@@ -99,13 +101,13 @@ El sistema calcula el precio comercial de un vehiculo consultando **multiples fu
 
 ## Snippet: Calculo de Depreciacion por Fuente
 
-Cada fuente de precios aplica su propia formula de depreciacion. A continuacion el snippet de la logica utilizada:
+Cada proveedor de precios aplica su propia formula de depreciacion. A continuacion el snippet de la logica utilizada:
 
-### PatioTuerca (Proveedor de Precios)
+### Proveedor de Precios A
 
 ```java
 /**
- * Formula de depreciacion PatioTuerca:
+ * Formula de depreciacion Proveedor A:
  *
  *   precioBase      = $12,500.00 (valor base de referencia)
  *   tasaDepreciacion = 8% anual
@@ -145,11 +147,11 @@ private BigDecimal calculateMockPrice(Vehicle vehicle) {
 }
 ```
 
-### Aseguradora (Aseguradora)
+### Proveedor de Precios B
 
 ```java
 /**
- * Formula de depreciacion Aseguradora:
+ * Formula de depreciacion Proveedor B:
  *
  *   valorAsegurado   = $13,000.00 (valor base asegurado)
  *   tasaDepreciacion  = 7% anual
@@ -193,20 +195,20 @@ private BigDecimal calculateMockPrice(Vehicle vehicle) {
 
 ## Snippet: Promedio de Multiples Fuentes
 
-Una vez obtenidos los precios de cada fuente, se promedian:
+Una vez obtenidos los precios de cada proveedor, se promedian:
 
 ```java
 /**
- * Promedio de precios de N fuentes:
+ * Promedio de precios de N proveedores:
  *
  *   precioPromedio = Σ(avgPrice[i]) / N
  *   precioMinimo   = Σ(minPrice[i]) / N
  *   precioMaximo   = Σ(maxPrice[i]) / N
  *
- * Ejemplo con 2 fuentes (PatioTuerca + Aseguradora):
- *   avgPatioTuerca = $5,500.00   avgAseguradora = $6,630.00
- *   minPatioTuerca = $4,675.00   minAseguradora = $5,967.00
- *   maxPatioTuerca = $6,325.00   maxAseguradora = $7,293.00
+ * Ejemplo con 2 proveedores (Proveedor A + Proveedor B):
+ *   avgProveedorA = $5,500.00   avgProveedorB = $6,630.00
+ *   minProveedorA = $4,675.00   minProveedorB = $5,967.00
+ *   maxProveedorA = $6,325.00   maxProveedorB = $7,293.00
  *
  *   precioPromedio = (5500 + 6630) / 2 = $6,065.00
  *   precioMinimo   = (4675 + 5967) / 2 = $5,321.00
@@ -294,7 +296,7 @@ La consulta a proveedores de datos y precios se ejecuta en paralelo con timeout:
  *   1. Lanza N extractores en hilos separados (@Async)
  *   2. Espera a que todos completen (o timeout de 25s)
  *   3. Recolecta resultados exitosos
- *   4. Ordena por prioridad (1=SRI, 2=SourceDB, 4=ANT)
+ *   4. Ordena por prioridad (1=Primario, 2=Secundario, 4=Terciario)
  *   5. Merge: el primer campo no-nulo gana (mayor prioridad)
  */
 List<CompletableFuture<ExtractedVehicleData>> futures =
@@ -326,12 +328,12 @@ List<ExtractedVehicleData> results = futures.stream()
 
 ---
 
-## Tabla Comparativa de Fuentes
+## Tabla Comparativa de Proveedores de Precios
 
-| Fuente | Tipo | Depreciacion | Piso | Rango | Latencia (mock) |
-|--------|------|-------------|------|-------|-----------------|
-| PatioTuerca | Proveedor de Precios | 8% anual | 20% | +/- 15% | 2.5s |
-| Aseguradora | Aseguradora | 7% anual | 25% | +/- 10% | 1.8s |
+| Proveedor | Tipo | Depreciacion | Piso | Rango | Latencia (mock) |
+|-----------|------|-------------|------|-------|-----------------|
+| Proveedor de Precios A | Proveedor habilitado | 8% anual | 20% | +/- 15% | 2.5s |
+| Proveedor de Precios B | Proveedor habilitado | 7% anual | 25% | +/- 10% | 1.8s |
 
 ---
 
@@ -359,7 +361,7 @@ List<ExtractedVehicleData> results = futures.stream()
         "averagePrice": 6065.00,
         "minPrice": 5321.00,
         "maxPrice": 6809.00,
-        "source": "PATIO_TUERCA,Aseguradora",
+        "source": "PRICE_PROVIDER_A,PRICE_PROVIDER_B",
         "calculationDate": "2025-02-26T10:30:00"
       }
     }
@@ -377,8 +379,8 @@ List<ExtractedVehicleData> results = futures.stream()
 | `service/impl/PriceCalculationServiceImpl.java` | Orquestador de calculo de precios |
 | `service/impl/VehicleExtractionServiceImpl.java` | Orquestador de consulta paralela a proveedores |
 | `service/impl/VehicleQueryServiceImpl.java` | Orquestador principal del flujo completo |
-| `extractor/mock/PatioTuercaPriceExtractorMock.java` | Mock de precios PatioTuerca |
-| `extractor/mock/AseguradoraPriceExtractorMock.java` | Mock de precios Aseguradora |
+| `extractor/mock/PriceProviderAExtractorMock.java` | Mock de precios Proveedor A |
+| `extractor/mock/PriceProviderBExtractorMock.java` | Mock de precios Proveedor B |
 | `extractor/interfaces/VehiclePriceExtractor.java` | Interfaz contrato para extractores de precios |
 | `model/VehicleHomologation.java` | Entidad de homologacion marca-modelo |
 | `mapper/VehicleMapper.java` | Merge de datos extraidos por prioridad |

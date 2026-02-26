@@ -20,9 +20,9 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Mock del extractor del SRI para demo.
+ * Mock del extractor del proveedor primario para demo.
  *
- * Simula la respuesta del servicio de proveedor del SRI
+ * Simula la respuesta del servicio del proveedor primario
  * con datos de ejemplo y latencia artificial.
  *
  * @author JJARA
@@ -30,10 +30,11 @@ import java.util.concurrent.CompletableFuture;
  * @since 2025-02-26
  */
 @Component
-public class SriExtractorMock implements VehicleDataExtractor {
+public class PrimaryProviderExtractorMock
+    implements VehicleDataExtractor {
 
     private static final Logger log =
-        LoggerFactory.getLogger(SriExtractorMock.class);
+        LoggerFactory.getLogger(PrimaryProviderExtractorMock.class);
 
     private static final int SIMULATED_DELAY_MS = 2000;
 
@@ -45,8 +46,10 @@ public class SriExtractorMock implements VehicleDataExtractor {
     public CompletableFuture<ExtractedVehicleData> extractByPlate(
         String licensePlate
     ) {
-        log.info("SRI Mock: extrayendo datos para placa {}",
-            licensePlate);
+        log.info(
+            "Proveedor Primario Mock: extrayendo datos para placa {}",
+            licensePlate
+        );
         simulateDelay();
 
         ExtractedVehicleData data = ExtractedVehicleData.builder()
@@ -67,8 +70,10 @@ public class SriExtractorMock implements VehicleDataExtractor {
             .orderPriority(getPriority())
             .build();
 
-        log.info("SRI Mock: datos extraidos para placa {}",
-            licensePlate);
+        log.info(
+            "Proveedor Primario Mock: datos extraidos para placa {}",
+            licensePlate
+        );
         return CompletableFuture.completedFuture(data);
     }
 
@@ -85,7 +90,7 @@ public class SriExtractorMock implements VehicleDataExtractor {
      */
     @Override
     public String getSourceName() {
-        return "SRI";
+        return "PRIMARY_PROVIDER";
     }
 
     /**

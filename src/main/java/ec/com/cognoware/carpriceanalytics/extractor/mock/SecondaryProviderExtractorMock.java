@@ -20,19 +20,22 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Mock del extractor de la base de datos fuente para demo.
+ * Mock del extractor del proveedor secundario para demo.
  *
- * Simula la respuesta de SourceDB con datos de ejemplo.
+ * Simula la respuesta del servicio del proveedor secundario
+ * con datos de ejemplo.
  *
  * @author JJARA
  * @version 1.0.0
  * @since 2025-02-26
  */
 @Component
-public class SourceDbExtractorMock implements VehicleDataExtractor {
+public class SecondaryProviderExtractorMock
+    implements VehicleDataExtractor {
 
-    private static final Logger log =
-        LoggerFactory.getLogger(SourceDbExtractorMock.class);
+    private static final Logger log = LoggerFactory.getLogger(
+        SecondaryProviderExtractorMock.class
+    );
 
     private static final int SIMULATED_DELAY_MS = 1500;
 
@@ -44,8 +47,10 @@ public class SourceDbExtractorMock implements VehicleDataExtractor {
     public CompletableFuture<ExtractedVehicleData> extractByPlate(
         String licensePlate
     ) {
-        log.info("SourceDB Mock: extrayendo datos para placa {}",
-            licensePlate);
+        log.info(
+            "Proveedor Secundario Mock: extrayendo datos para placa {}",
+            licensePlate
+        );
         simulateDelay();
 
         ExtractedVehicleData data = ExtractedVehicleData.builder()
@@ -62,8 +67,10 @@ public class SourceDbExtractorMock implements VehicleDataExtractor {
             .orderPriority(getPriority())
             .build();
 
-        log.info("SourceDB Mock: datos extraidos para placa {}",
-            licensePlate);
+        log.info(
+            "Proveedor Secundario Mock: datos extraidos para placa {}",
+            licensePlate
+        );
         return CompletableFuture.completedFuture(data);
     }
 
@@ -80,11 +87,11 @@ public class SourceDbExtractorMock implements VehicleDataExtractor {
      */
     @Override
     public String getSourceName() {
-        return "SOURCE_DB";
+        return "SECONDARY_PROVIDER";
     }
 
     /**
-     * Simula latencia de red en la extraccion.
+     * Simula latencia de red en la consulta al proveedor.
      *
      * Uso de try-catch: necesario para manejar
      * InterruptedException del Thread.sleep() y restaurar

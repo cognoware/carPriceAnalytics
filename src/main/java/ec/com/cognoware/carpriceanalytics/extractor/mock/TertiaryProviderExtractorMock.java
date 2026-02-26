@@ -20,19 +20,20 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Mock del extractor de deudas ANT para demo.
+ * Mock del extractor del proveedor terciario para demo.
  *
- * Simula la respuesta del servicio de proveedor de la ANT.
+ * Simula la respuesta del servicio del proveedor terciario.
  *
  * @author JJARA
  * @version 1.0.0
  * @since 2025-02-26
  */
 @Component
-public class AntDebtExtractorMock implements VehicleDataExtractor {
+public class TertiaryProviderExtractorMock
+    implements VehicleDataExtractor {
 
     private static final Logger log =
-        LoggerFactory.getLogger(AntDebtExtractorMock.class);
+        LoggerFactory.getLogger(TertiaryProviderExtractorMock.class);
 
     private static final int SIMULATED_DELAY_MS = 3000;
 
@@ -44,8 +45,10 @@ public class AntDebtExtractorMock implements VehicleDataExtractor {
     public CompletableFuture<ExtractedVehicleData> extractByPlate(
         String licensePlate
     ) {
-        log.info("ANT Mock: extrayendo datos para placa {}",
-            licensePlate);
+        log.info(
+            "Proveedor Terciario Mock: extrayendo datos para placa {}",
+            licensePlate
+        );
         simulateDelay();
 
         ExtractedVehicleData data = ExtractedVehicleData.builder()
@@ -58,8 +61,10 @@ public class AntDebtExtractorMock implements VehicleDataExtractor {
             .orderPriority(getPriority())
             .build();
 
-        log.info("ANT Mock: datos extraidos para placa {}",
-            licensePlate);
+        log.info(
+            "Proveedor Terciario Mock: datos extraidos para placa {}",
+            licensePlate
+        );
         return CompletableFuture.completedFuture(data);
     }
 
@@ -76,11 +81,11 @@ public class AntDebtExtractorMock implements VehicleDataExtractor {
      */
     @Override
     public String getSourceName() {
-        return "ANT";
+        return "TERTIARY_PROVIDER";
     }
 
     /**
-     * Simula latencia de red en la consulta al proveedor ANT.
+     * Simula latencia de red en la consulta al proveedor terciario.
      *
      * Uso de try-catch: necesario para manejar
      * InterruptedException del Thread.sleep() y restaurar

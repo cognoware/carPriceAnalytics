@@ -22,22 +22,22 @@ public final class AppConstants {
     }
 
     /**
-     * Prioridad 1: fuente mas confiable (SRI)
+     * Prioridad 1: proveedor primario (mayor confiabilidad).
      */
     public static final int ORDER_PRIORITY_ONE = 1;
 
     /**
-     * Prioridad 2: segunda fuente (SourceDB)
+     * Prioridad 2: proveedor secundario.
      */
     public static final int ORDER_PRIORITY_TWO = 2;
 
     /**
-     * Prioridad 3: tercera fuente (APISTON)
+     * Prioridad 3: proveedor terciario alternativo.
      */
     public static final int ORDER_PRIORITY_THREE = 3;
 
     /**
-     * Prioridad 4: cuarta fuente (ANT)
+     * Prioridad 4: proveedor terciario.
      */
     public static final int ORDER_PRIORITY_FOUR = 4;
 

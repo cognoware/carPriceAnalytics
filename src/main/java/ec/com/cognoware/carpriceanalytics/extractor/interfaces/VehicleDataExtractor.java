@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Interfaz para extractores de datos vehiculares desde fuentes externas.
  *
- * Cada implementacion representa una fuente de datos (SRI, ANT, etc.)
+ * Cada implementacion representa un proveedor habilitado
  * con su propia prioridad para el merge de resultados.
  *
  * @author JJARA
