@@ -22,9 +22,9 @@ import java.time.LocalDateTime;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Mock del extractor de precios Generali para demo.
+ * Mock del extractor de precios Aseguradora para demo.
  *
- * Simula la consulta de precios de aseguradora Generali
+ * Simula la consulta de precios de aseguradora Aseguradora
  * con datos de ejemplo.
  *
  * @author JJARA
@@ -36,7 +36,7 @@ public class GeneraliPriceExtractorMock
     implements VehiclePriceExtractor {
 
     private static final Logger log = LoggerFactory.getLogger(
-        GeneraliPriceExtractorMock.class
+            GeneraliPriceExtractorMock.class
     );
 
     private static final int SIMULATED_DELAY_MS = 1800;
@@ -55,7 +55,7 @@ public class GeneraliPriceExtractorMock
         Vehicle vehicle
     ) {
         log.info(
-            "Generali Mock: calculando precio para {} {} {}",
+            "Aseguradora Mock: calculando precio para {} {} {}",
             vehicle.getBrand(),
             vehicle.getModel(),
             vehicle.getVehicleYear()
@@ -79,7 +79,7 @@ public class GeneraliPriceExtractorMock
             .build();
 
         log.info(
-            "Generali Mock: precio calculado ${} para {} {}",
+            "Aseguradora Mock: precio calculado ${} para {} {}",
             avgPrice,
             vehicle.getBrand(),
             vehicle.getModel()
@@ -92,7 +92,7 @@ public class GeneraliPriceExtractorMock
      */
     @Override
     public String getSourceName() {
-        return "GENERALI";
+        return "Aseguradora";
     }
 
     private BigDecimal calculateMockPrice(Vehicle vehicle) {
@@ -113,7 +113,7 @@ public class GeneraliPriceExtractorMock
     }
 
     /**
-     * Simula latencia de red en la consulta Generali.
+     * Simula latencia de red en la consulta Aseguradora.
      *
      * Uso de try-catch: necesario para manejar
      * InterruptedException del Thread.sleep() y restaurar

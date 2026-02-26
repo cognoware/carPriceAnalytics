@@ -8,7 +8,7 @@ Autor: **JJARA** | Version: **1.0.0** | Fecha: **2025-02-26**
 
 ## Descripcion
 
-API REST que consulta datos vehiculares desde multiples fuentes externas (SRI, ANT, SourceDB) mediante procesos RPA en paralelo, calcula precios comerciales desde PatioTuerca y Generali, y expone los resultados a traves de endpoints seguros con JWT (Keycloak).
+API REST que consulta datos vehiculares desde multiples fuentes externas (SRI, ANT, SourceDB) mediante procesos RPA en paralelo, calcula precios comerciales desde PatioTuerca y Aseguradora, y expone los resultados a traves de endpoints seguros con JWT (Keycloak).
 
 Este proyecto es una migracion del flujo `PersonaVehiculoController` del proyecto legacy `consultas_spring` hacia una arquitectura moderna con Spring Boot 4.0.3 y Java 21.
 
@@ -81,7 +81,7 @@ Request → Controller → VehicleQueryService
                               (paralelo, 20s timeout)
                                     │
                               ┌─────┴─────┐
-                          PatioTuerca  Generali
+                          PatioTuerca  Aseguradora
                                     │
                               Promedio fuentes
                                     │
@@ -215,7 +215,7 @@ Para la demo, los extractores RPA son **mocks** que retornan datos fijos con lat
 | SourceDB | Datos vehiculares | 2 | 1.5s | Placa, dueño, marca, modelo |
 | ANT | Datos vehiculares | 4 (menor) | 3.0s | Placa, marca, modelo, canton |
 | PatioTuerca | Precios | - | 2.5s | Avg, min, max (depreciacion 8%) |
-| Generali | Precios | - | 1.8s | Avg, min, max (depreciacion 7%) |
+| Aseguradora | Precios | - | 1.8s | Avg, min, max (depreciacion 7%) |
 
 Para reemplazar un mock por la implementacion real, basta con crear una nueva clase que implemente `VehicleDataExtractor` o `VehiclePriceExtractor` y anotarla con `@Component`.
 
@@ -242,7 +242,7 @@ Ver [docs/PRICE_CALCULATION.md](docs/PRICE_CALCULATION.md) para el detalle compl
 | `ValidadorActualizable` | `FreshnessValidator` |
 | `ServicioService` | `ServiceConfigServiceImpl` |
 | `VehiculoHomologacionService` | `PriceCalculationServiceImpl` |
-| `PersonaVehiculoGeneraliDto` | `ExtractedVehicleData` |
+| `PersonaVehiculoAseguradoraDto` | `ExtractedVehicleData` |
 | `ConsultaPersonaVehiculo` | `VehicleQueryOutput` |
 | `SRIVehiculosPythonExtractor` | `SriExtractorMock` |
 | `SourceDBVehiculoExtractor` | `SourceDbExtractorMock` |

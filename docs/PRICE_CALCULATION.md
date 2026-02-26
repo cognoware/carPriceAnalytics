@@ -69,7 +69,7 @@ El sistema calcula el precio comercial de un vehiculo consultando **multiples fu
                            │    ┌─────────┴──────────┐
                            │    ▼                    ▼
                            │ ┌──────────┐    ┌──────────┐
-                           │ │PatioTuerca│   │ Generali │
+                           │ │PatioTuerca│   │ Aseguradora │
                            │ │  2.5s     │   │  1.8s    │
                            │ └──────────┘    └──────────┘
                            │         │            │
@@ -145,11 +145,11 @@ private BigDecimal calculateMockPrice(Vehicle vehicle) {
 }
 ```
 
-### Generali (Aseguradora)
+### Aseguradora (Aseguradora)
 
 ```java
 /**
- * Formula de depreciacion Generali:
+ * Formula de depreciacion Aseguradora:
  *
  *   valorAsegurado   = $13,000.00 (valor base asegurado)
  *   tasaDepreciacion  = 7% anual
@@ -203,10 +203,10 @@ Una vez obtenidos los precios de cada fuente, se promedian:
  *   precioMinimo   = Σ(minPrice[i]) / N
  *   precioMaximo   = Σ(maxPrice[i]) / N
  *
- * Ejemplo con 2 fuentes (PatioTuerca + Generali):
- *   avgPatioTuerca = $5,500.00   avgGenerali = $6,630.00
- *   minPatioTuerca = $4,675.00   minGenerali = $5,967.00
- *   maxPatioTuerca = $6,325.00   maxGenerali = $7,293.00
+ * Ejemplo con 2 fuentes (PatioTuerca + Aseguradora):
+ *   avgPatioTuerca = $5,500.00   avgAseguradora = $6,630.00
+ *   minPatioTuerca = $4,675.00   minAseguradora = $5,967.00
+ *   maxPatioTuerca = $6,325.00   maxAseguradora = $7,293.00
  *
  *   precioPromedio = (5500 + 6630) / 2 = $6,065.00
  *   precioMinimo   = (4675 + 5967) / 2 = $5,321.00
@@ -331,7 +331,7 @@ List<ExtractedVehicleData> results = futures.stream()
 | Fuente | Tipo | Depreciacion | Piso | Rango | Latencia (mock) |
 |--------|------|-------------|------|-------|-----------------|
 | PatioTuerca | Web Scraping | 8% anual | 20% | +/- 15% | 2.5s |
-| Generali | Aseguradora | 7% anual | 25% | +/- 10% | 1.8s |
+| Aseguradora | Aseguradora | 7% anual | 25% | +/- 10% | 1.8s |
 
 ---
 
@@ -359,7 +359,7 @@ List<ExtractedVehicleData> results = futures.stream()
         "averagePrice": 6065.00,
         "minPrice": 5321.00,
         "maxPrice": 6809.00,
-        "source": "PATIO_TUERCA,GENERALI",
+        "source": "PATIO_TUERCA,Aseguradora",
         "calculationDate": "2025-02-26T10:30:00"
       }
     }
@@ -378,7 +378,7 @@ List<ExtractedVehicleData> results = futures.stream()
 | `service/impl/VehicleExtractionServiceImpl.java` | Orquestador de extraccion RPA paralela |
 | `service/impl/VehicleQueryServiceImpl.java` | Orquestador principal del flujo completo |
 | `extractor/mock/PatioTuercaPriceExtractorMock.java` | Mock de precios PatioTuerca |
-| `extractor/mock/GeneraliPriceExtractorMock.java` | Mock de precios Generali |
+| `extractor/mock/AseguradoraPriceExtractorMock.java` | Mock de precios Aseguradora |
 | `extractor/interfaces/VehiclePriceExtractor.java` | Interfaz contrato para extractores de precios |
 | `model/VehicleHomologation.java` | Entidad de homologacion marca-modelo |
 | `mapper/VehicleMapper.java` | Merge de datos extraidos por prioridad |

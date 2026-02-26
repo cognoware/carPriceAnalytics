@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
  * Calcula precios vehiculares desde multiples fuentes.
  *
  * Realiza homologacion del modelo comercial y consulta
- * precios en paralelo de PatioTuerca y Generali.
+ * precios en paralelo de PatioTuerca y Aseguradora.
  *
  * @author JJARA
  * @version 1.0.0
